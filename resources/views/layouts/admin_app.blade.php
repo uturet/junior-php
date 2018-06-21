@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Junior-PHP</title>
     <link rel="stylesheet" href="{{ mix('/css/app.css') }}">
-    <link rel="stylesheet" href="{{ mix('/css/font-awesome.css') }}">
 
 </head>
 
@@ -31,6 +30,15 @@
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
             <ul class="nav">
                 <li class="nav-item active"><a class="nav-link" href="{{ route('employees_data') }}"><span class="menu-title">Главная</span></a></li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="collapse" href="#employees" aria-expanded="false" aria-controls="employees"><span class="menu-title">Сотрудники</span></a>
+                    <div class="collapse" id="employees">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item"> <a class="nav-link active" href="{{ route('employees.index', 'decorated') }}">Оформленные</a></li>
+                            <li class="nav-item"> <a class="nav-link active" href="{{ route('employees.index', 'unformed') }}">Неоформленные</a></li>
+                        </ul>
+                    </div>
+                </li>
             </ul>
         </nav>
 

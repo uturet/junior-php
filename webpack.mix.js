@@ -11,7 +11,8 @@ let mix = require('laravel-mix');
  |
  */
 
-mix.react('resources/assets/js/employees_data-index-app.js', 'public/js')
+mix.react('resources/assets/js/employees_data-index-app.js', 'public/js');
+mix.react('resources/assets/js/search-form-app.js', 'public/js');
 
 mix.scripts([
     'node_modules/jquery/dist/jquery.js',
@@ -21,7 +22,6 @@ mix.scripts([
 mix.sass('resources/assets/sass/app.scss', 'public/css/app.css');
 
 mix.copy('resources/assets/images', 'public/images');
-mix.copy('node_modules/font-awesome/css/font-awesome.css', 'public/css');
 mix.copy('node_modules/font-awesome/fonts', 'public/fonts');
 
 mix.browserSync('junior-php');

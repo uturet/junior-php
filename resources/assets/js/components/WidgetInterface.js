@@ -98,9 +98,9 @@ class WidgetInterface extends React.Component {
         this.toggleDisabled(path, disabledSetFalse)
     }
 
-    loadSubCollection(baseUrl, callback, reload = true) {
+    loadSubCollection(baseUrl, callback, reload = true, urlBuilder = true) {
         axios.create({
-            baseURL: `${document.location.origin}/api/${baseUrl}`,
+            baseURL: urlBuilder ? `${document.location.origin}/api/${baseUrl}` : baseUrl,
             headers: {
                 'Content-Type': 'application/json',
             }
@@ -212,6 +212,27 @@ class WidgetInterface extends React.Component {
         return modelList;
     }
 
+
+    loadCollectionList(url) {
+        this.setState({onLoad: true});
+
+        if (url) {
+            this.loadSubCollection(
+                url,
+                (response) => this.setState(oldState => {
+                    oldState.collection.push(...response.data.data)
+                    return {
+                        CollectionListURL: response.data.next_page_url,
+                        collection: oldState.collection,
+                        onLoad: false
+                    }
+                }),
+                true,
+                false
+            )
+        }
+
+    }
 
 }
 export default WidgetInterface;
