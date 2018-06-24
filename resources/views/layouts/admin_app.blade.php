@@ -8,6 +8,14 @@
     <title>Junior-PHP</title>
     <link rel="stylesheet" href="{{ mix('/css/app.css') }}">
 
+    @auth
+        <script type="text/javascript">
+            window.remember_token = '{{ Auth::user()->remember_token }}';
+            window.user_id = '{{ Auth::user()->id }}';
+            window.csrf = '{{ csrf_token() }}';
+        </script>
+    @endauth
+
 </head>
 
 <body id="root">
@@ -17,6 +25,22 @@
         <div class="text-center navbar-brand-wrapper d-flex align-items-top justify-content-center">
         </div>
         <div class="navbar-menu-wrapper d-flex align-items-center">
+            <ul class="navbar-nav navbar-nav-left header-links d-none d-md-flex">
+                @guest
+                    <li class="nav-item">
+                        <a href="{{ route('login') }}" class="nav-link"><i class="mdi mdi-email-outline"></i>Авторизация</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('register') }}" class="nav-link"><i class="mdi mdi-calendar"></i>Регистрация</a>
+                    </li>
+                @else
+                    <li class="nav-item">
+                        {!! Form::open(['url' => route('logout'), 'method' => 'POST']) !!}
+                        <button class="btn btn-link nav-link"><i class="mdi mdi-image-filter"></i>Выход</button>
+                        {!! Form::close() !!}
+                    </li>
+                @endguest
+            </ul>
             <ul class="navbar-nav navbar-nav-right">
             </ul>
             <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">

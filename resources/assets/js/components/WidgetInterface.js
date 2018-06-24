@@ -103,6 +103,8 @@ class WidgetInterface extends React.Component {
             baseURL: urlBuilder ? `${document.location.origin}/api/${baseUrl}` : baseUrl,
             headers: {
                 'Content-Type': 'application/json',
+                'X-REMEMBER-TOKEN': window.remember_token,
+                'X-USER-ID': `${window.user_id}`,
             }
         })
         .get()

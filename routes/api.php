@@ -19,8 +19,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('/managing-departments', 'Api\MainController@getManagingDepartments');
 
-Route::get('/departments/{id}/sub-collection-list', 'Api\MainController@getSubCollectionListByDepartment');
+Route::middleware('custom.api.auth')->group(function () {
 
-Route::get('/employees/collection-list', 'Api\MainController@getEmployeesCollectionList');
+    Route::get('/departments/{id}/sub-collection-list', 'Api\MainController@getSubCollectionListByDepartment');
 
-Route::get('/unformed-employees/collection-list', 'Api\MainController@getUnformedEmployeesCollectionList');
+    Route::get('/employees/collection-list', 'Api\MainController@getEmployeesCollectionList');
+
+    Route::get('/unformed-employees/collection-list', 'Api\MainController@getUnformedEmployeesCollectionList');
+
+});

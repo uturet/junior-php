@@ -13,4 +13,11 @@
 
 Route::get('', 'EmployeesDataController@index')->name('employees_data');
 
-Route::get('employees', 'EmployeeController@index')->name('employees.index');
+Route::middleware(['auth'])->group(function () {
+
+    Route::get('employees', 'EmployeeController@index')->name('employees.index');
+});
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
