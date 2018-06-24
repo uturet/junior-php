@@ -42,3 +42,13 @@
     }
   }
 }
+
+.sort-col {
+  cursor: pointer;
+}
+.sort-col:hover {
+  background-color: $content-bg;
+}
+.text-muted.sort-col:hover {
+  background-color: $white;
+}

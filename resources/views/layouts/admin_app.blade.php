@@ -34,8 +34,7 @@
                     <a class="nav-link" data-toggle="collapse" href="#employees" aria-expanded="false" aria-controls="employees"><span class="menu-title">Сотрудники</span></a>
                     <div class="collapse" id="employees">
                         <ul class="nav flex-column sub-menu">
-                            <li class="nav-item"> <a class="nav-link active" href="{{ route('employees.index', 'decorated') }}">Оформленные</a></li>
-                            <li class="nav-item"> <a class="nav-link active" href="{{ route('employees.index', 'unformed') }}">Неоформленные</a></li>
+                            <li class="nav-item"> <a class="nav-link active" href="{{ route('employees.index') }}">Все</a></li>
                         </ul>
                     </div>
                 </li>

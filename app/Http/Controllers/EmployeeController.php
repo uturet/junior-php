@@ -16,15 +16,9 @@ class EmployeeController extends Controller
      * @param $formatting
      * @return \Illuminate\Http\Response
      */
-    public function index(MediatorFilters $filters, Request $request, $formatting)
+    public function index(MediatorFilters $filters, Request $request)
     {
-        if ($formatting === 'unformed') {
-            $dbQuery = $this->dbUnformedQuery();
-        } else if ($formatting === 'decorated') {
-            $dbQuery = $this->dbDecoratedQuery();
-        }
-
-        $collection = $filters->apply($dbQuery);
+        $collection = $filters->apply($this->dbDecoratedQuery());
 
         $fields = [
             'id' => 'ID',
@@ -49,7 +43,7 @@ class EmployeeController extends Controller
         }
         $filtered['direction'] = $request['direction'];
 
-        return view('employees.index', compact('collection', 'fields', 'filtered', 'search', 'formatting'));
+        return view('employees.index', compact('collection', 'fields', 'filtered', 'search'));
     }
 
     protected function dbDecoratedQuery()
@@ -105,7 +99,7 @@ class EmployeeController extends Controller
             ->select('*')
             ->from(
                 DB::raw("($query) as collection")
-            );;
+            );
     }
 
 }

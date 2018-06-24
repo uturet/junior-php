@@ -16,7 +16,7 @@ class ModelList extends React.Component {
             hierarchy,
             modelName,
             isList,
-            thead, } = this.props;
+            thead} = this.props;
 
         if (!collection) { return (<div className="text-muted">Нет элементов</div>); }
 

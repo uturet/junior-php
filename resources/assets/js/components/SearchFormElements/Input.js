@@ -17,9 +17,11 @@ class Input extends React.Component{
 
     render() {
         const {value} = this.state;
+        const {disabled} = this.props;
         return (
             <div className={'col input-group'}>
-                <input itemType={"text"} className={`form-control${value ? '' : ' is-invalid'}`}
+                <input itemType={"text"} className={'form-control'}
+                       disabled={disabled}
                        value={value}
                        onChange={e => this.handleChange(e.target.value)}/>
             </div>

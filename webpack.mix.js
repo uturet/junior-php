@@ -12,7 +12,7 @@ let mix = require('laravel-mix');
  */
 
 mix.react('resources/assets/js/employees_data-index-app.js', 'public/js');
-mix.react('resources/assets/js/search-form-app.js', 'public/js');
+mix.react('resources/assets/js/employee-index-app.js', 'public/js');
 
 mix.scripts([
     'node_modules/jquery/dist/jquery.js',

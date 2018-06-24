@@ -11,6 +11,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        factory(App\Employee::class, 500)->create();
+
         list($e_num, $h_lvl) = array(9, 5);
 
         $head_employee = factory(App\Employee::class)->create();

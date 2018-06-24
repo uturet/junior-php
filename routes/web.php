@@ -13,6 +13,4 @@
 
 Route::get('', 'EmployeesDataController@index')->name('employees_data');
 
-Route::get('employees/{formatting}', 'EmployeeController@index')
-    ->where(['formatting' => 'unformed|decorated'])
-    ->name('employees.index');
+Route::get('employees', 'EmployeeController@index')->name('employees.index');

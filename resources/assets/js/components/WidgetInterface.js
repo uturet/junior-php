@@ -219,13 +219,11 @@ class WidgetInterface extends React.Component {
         if (url) {
             this.loadSubCollection(
                 url,
-                (response) => this.setState(oldState => {
-                    oldState.collection.push(...response.data.data)
-                    return {
-                        CollectionListURL: response.data.next_page_url,
-                        collection: oldState.collection,
-                        onLoad: false
-                    }
+                (response) => this.setState({
+                    current_page: response.data.current_page,
+                    last_page: response.data.last_page,
+                    collection: response.data.data,
+                    onLoad: false
                 }),
                 true,
                 false
