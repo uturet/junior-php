@@ -54,6 +54,18 @@ class MediatorFilters extends Filters
         return $this->filter($value, 'head_employee_full_name');
     }
 
+    public function name($value)
+    {
+        return $this->filter($value, 'name');
+    }
+
+    public function description($value)
+    {
+        return $this->filter($value, 'description');
+    }
+
+
+
     /**
      * @param $value
      * @param $where

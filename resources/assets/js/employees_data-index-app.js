@@ -55,6 +55,8 @@ ReactDOM.render(
             },
             {
                 modelProp: 'wage',
+                del: true,
+                edit: true
             }
         ]}
         header={'Иерархия Сотрудников'}/>,

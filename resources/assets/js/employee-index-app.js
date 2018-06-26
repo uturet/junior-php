@@ -5,6 +5,7 @@ import IndexPageTemplate from './components/IndexPageTemplate';
 
 ReactDOM.render(
     <IndexPageTemplate
+        warning={'Вся информация о сотруднике будет удалена!'}
         header={'Информация о сотрудниках'}
         url={`${document.location.origin}/api/employees/collection-list?`}
         employeesType={[
@@ -16,38 +17,12 @@ ReactDOM.render(
             {
                 label: 'Неоформленные сотрудники',
                 value: `${document.location.origin}/api/unformed-employees/collection-list?`
+            },
+            {
+                label: 'Уволенные сотрудники',
+                value: `${document.location.origin}/api/archived-employees/collection-list?`
             }
         ]}
-        columnPropsList={[
-            {
-                modelProp: 'id',
-            },
-            {
-                modelProp: 'employee_full_name',
-            },
-            {
-                modelProp: 'recruitment_date',
-            },
-            {
-                modelProp: 'phone',
-            },
-            {
-                modelProp: 'email',
-            },
-            {
-                modelProp: 'department_name',
-            },
-            {
-                modelProp: 'position_name',
-            },
-            {
-                modelProp: 'head_employee_full_name',
-            },
-            {
-                modelProp: 'wage',
-            },
-        ]}
-
         searchFields={[
             {
                 value: 'id',
@@ -85,6 +60,12 @@ ReactDOM.render(
                 value: 'wage',
                 label: 'Заработная плата'
             },
+            {
+                hidden: true,
+                del: true,
+                plus: true,
+                edit: true
+            }
         ]}/>,
     document.getElementById('index-app'),
 );

@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Filters\MediatorFilters;
+use App\Event;
+use App\Employee;
+use App\Mediator;
 use Illuminate\Http\Request;
+use App\Filters\MediatorFilters;
 use Illuminate\Support\Facades\DB;
 
 class EmployeeController extends Controller
@@ -45,6 +48,106 @@ class EmployeeController extends Controller
 
         return view('employees.index', compact('collection', 'fields', 'filtered', 'search'));
     }
+
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('employees.create');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $this->validate($request, [
+            'name' => 'required',
+            'last_name' => 'required',
+            'patronymic' => 'required',
+            'avatar' => 'image|mimes:jpg,png,jpeg'
+        ]);
+
+        $employee = Employee::create($request->all());
+
+        return redirect()->route('employees.show', ['id' => $employee->id]);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $employee = Employee::find($id);
+
+        return view('employees.show', ['employee' => $employee]);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $employee = Employee::find($id);
+
+        return view('employees.edit', ['employee' => $employee]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $this->validate($request, [
+            'name' => 'required',
+            'last_name' => 'required',
+            'patronymic' => 'required',
+        ]);
+        $employee = Employee::findOrFail($id);
+        $employee->update($request->all());
+
+        return redirect()->route('employees.show', ['id' => $employee->id]);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     * @throws \Exception
+     */
+    public function destroy($id)
+    {
+        $employee = Employee::find($id);
+
+        if ($employee->mediator) {
+            $employee->mediator->translateSubMediators();
+        }
+
+        $employee->mediator()->delete();
+        $employee->events()->delete();
+        $employee->delete();
+
+        return response()->json([intval($id)], 201);
+    }
+
 
     protected function dbDecoratedQuery()
     {

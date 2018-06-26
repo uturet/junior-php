@@ -15,7 +15,14 @@ Route::get('', 'EmployeesDataController@index')->name('employees_data');
 
 Route::middleware(['auth'])->group(function () {
 
-    Route::get('employees', 'EmployeeController@index')->name('employees.index');
+    Route::resource('employees', 'EmployeeController');
+
+    Route::resource('positions', 'PositionController');
+
+    Route::resource('departments', 'DepartmentController');
+
+    Route::resource('events', 'EventController');
+
 });
 
 Auth::routes();

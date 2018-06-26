@@ -26,8 +26,14 @@ class IndexPageTemplate extends WidgetInterface {
         this.loadCollectionList(this.state.CollectionListURL)
     }
 
-    redirect(id) {
-        document.location.assign(`${document.location.pathname}/${id}/edit`);
+    redirect(id, isEdit = false) {
+
+        if (!isEdit) {
+            document.location.assign(`${document.location.pathname}/${id}/edit`);
+        } else {
+            document.location.assign(`/events/${id}`);
+        }
+
     }
 
     selectTypeLoadCollection(url, searchValue = null) {
@@ -40,7 +46,7 @@ class IndexPageTemplate extends WidgetInterface {
         this.loadCollectionList(url);
     }
 
-    cahngeDirection(dir) {
+    changeDirection(dir) {
         const options = {
             'asc': 'desc',
             'desc': 'asc'
@@ -53,7 +59,7 @@ class IndexPageTemplate extends WidgetInterface {
             const {CollectionListURL, direction, sort, query} = this.state;
 
             const dir = value === sort ?
-                this.cahngeDirection(direction):
+                this.changeDirection(direction):
                 'desc';
 
             const newQuery = `${value}=_query&direction=${dir}`;
@@ -74,30 +80,43 @@ class IndexPageTemplate extends WidgetInterface {
 
     render() {
         const {searchValue, collection, onLoad, CollectionListURL, current_page, last_page, sort, direction} = this.state;
-        const {header, columnPropsList, searchFields, employeesType} = this.props;
+        const {header, searchFields, employeesType, warning} = this.props;
 
-        const rowList = columnPropsList.map(e => {
+        const rowList = searchFields.map(e => {
             return (
                 <TableData
-                    key={`${e.modelProp}`}
-                    modelProp={e.modelProp}
-                    redirect={id => this.redirect(id)}
-                    uneditable={e.uneditable}/>
+                    key={`${e.value}`}
+                    modelProp={e.value}
+                    delete={e.hidden ? id => this.deleteItem(
+                        id,
+                        warning,
+                        CollectionListURL
+                    ) : undefined}
+                    redirect={(id, isEdit)=> this.redirect(id, isEdit)}
+                    del={e.del}
+                    plus={e.plus}
+                    edit={e.edit}/>
             )
         });
 
         const tableHeadList = searchFields.map(e => {
-            return (
-                <td
-                    className={`sort-col${onLoad || e.value === searchValue ? ' text-muted' : ''}`+
-                    `${e.value === sort && direction === 'asc' ? ' dropup' : ''}`}
-                    onClick={() => this.sortBy(e.value, onLoad)}
-                    key={e.value}>
+            if (e.hidden) {
+                return (
+                    <td key={'disabled'}/>
+                )
+            } else {
+                return (
+                    <td
+                        className={`sort-col${onLoad || e.value === searchValue ? ' text-muted' : ''}`+
+                        `${e.value === sort && direction === 'asc' ? ' dropup' : ''}`}
+                        onClick={() => this.sortBy(e.value, onLoad)}
+                        key={e.value}>
                     <span className={`${e.value === sort ? ' dropdown-toggle' : ''}`}>
                         {e.label}
                     </span>
-                </td>
-            )
+                    </td>
+                )
+            }
         });
 
         const tableHead = (
@@ -134,18 +153,22 @@ class IndexPageTemplate extends WidgetInterface {
             </div>
         ) : null;
 
+        const selectTypes = employeesType ? (
+            <Select
+                col={false}
+                disabled={onLoad}
+                onChange={url => this.selectTypeLoadCollection(url)}
+                options={employeesType}/>
+        ) : null;
+
         return (
             <div className='row'>
                 <div className="col">
                     <div className="card">
 
                         <div className="card-body">
-                            <h4 className="card-title">Список Сотрудников</h4>
-                            <Select
-                                col={false}
-                                disabled={onLoad}
-                                onChange={url => this.selectTypeLoadCollection(url)}
-                                options={employeesType}/>
+                            <h4 className="card-title">{header}</h4>
+                            {selectTypes}
                         </div>
 
                         <div className="card-body">
@@ -158,9 +181,6 @@ class IndexPageTemplate extends WidgetInterface {
                         </div>
 
                         <div className="card-body">
-                            <h4 className="card-title">
-                                {header}
-                            </h4>
                             <div className='table-responsive'>
                                 {widgetSidebar}
                             </div>

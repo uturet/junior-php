@@ -58,7 +58,35 @@
                     <a class="nav-link" data-toggle="collapse" href="#employees" aria-expanded="false" aria-controls="employees"><span class="menu-title">Сотрудники</span></a>
                     <div class="collapse" id="employees">
                         <ul class="nav flex-column sub-menu">
-                            <li class="nav-item"> <a class="nav-link active" href="{{ route('employees.index') }}">Все</a></li>
+                            <li class="nav-item"> <a class="nav-link active" href="{{ route('employees.index') }}">Все Сотрудники</a></li>
+                            <li class="nav-item"> <a class="nav-link active" href="{{ route('employees.create') }}">Создать</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" data-toggle="collapse" href="#positions" aria-expanded="false" aria-controls="positions"><span class="menu-title">Должности</span></a>
+                    <div class="collapse" id="positions">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item"> <a class="nav-link active" href="{{ route('positions.index') }}">Все Должности</a></li>
+                            <li class="nav-item"> <a class="nav-link active" href="{{ route('positions.create') }}">Создать</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" data-toggle="collapse" href="#departments" aria-expanded="false" aria-controls="departments"><span class="menu-title">Подразделения</span></a>
+                    <div class="collapse" id="departments">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item"> <a class="nav-link active" href="{{ route('departments.index') }}">Все Подразделения</a></li>
+                            <li class="nav-item"> <a class="nav-link active" href="{{ route('departments.create') }}">Создать</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" data-toggle="collapse" href="#events" aria-expanded="false" aria-controls="events"><span class="menu-title">События</span></a>
+                    <div class="collapse" id="events">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item"> <a class="nav-link active" href="{{ route('events.index') }}">Все События</a></li>
+                            <li class="nav-item"> <a class="nav-link active" href="{{ route('events.create') }}">Создать</a></li>
                         </ul>
                     </div>
                 </li>

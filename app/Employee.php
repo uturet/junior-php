@@ -24,7 +24,7 @@ class Employee extends Model
 
     public function events()
     {
-        return $this->hasMany('App\Event');
+        return $this->hasMany('App\Event')->orderBy('id', 'desc');
     }
 
     public function mediator()

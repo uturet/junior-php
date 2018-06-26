@@ -10,13 +10,7 @@ class ModelList extends React.Component {
     }
 
     render() {
-        const {
-            collection,
-            children,
-            hierarchy,
-            modelName,
-            isList,
-            thead} = this.props;
+        const { collection, children, hierarchy, modelName, isList, thead, footer } = this.props;
 
         if (!collection) { return (<div className="text-muted">Нет элементов</div>); }
 
@@ -28,20 +22,21 @@ class ModelList extends React.Component {
                 React.cloneElement(child, { model, hierarchy, modelName}));
 
             return (
-                <tr
-                    key={[model.id, model.path, model.selected, model.disabled, model.marker]}>
+                <tr key={[model.id, model.path, model.selected, model.disabled, model.marker]}>
                     {Model}
                 </tr>
             );
         });
+
         return (
             <table className="table table-hover">
                 {thead}
 
                 <tbody>
 
-                    {modelList}
+                {modelList}
 
+                {footer}
                 </tbody>
             </table>
         );

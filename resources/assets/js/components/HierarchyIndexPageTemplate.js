@@ -43,8 +43,9 @@ class HierarchyIndexPageTemplate extends WidgetInterface {
                         key={`${e.modelProp}${i}`}
                         img={e.img}
                         modelProp={e.modelProp}
-                        undel={e.undel}
-                        uneditable={e.uneditable}/>
+                        del={e.del}
+                        plus={e.plus}
+                        edit={e.edit}/>
                 )
             }
 

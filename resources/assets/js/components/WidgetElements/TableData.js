@@ -11,7 +11,7 @@ class TableData extends React.Component {
     }
 
     render() {
-        const {modelProp, model, uneditable, undel, img} = this.props;
+        const {modelProp, model, edit, plus, del, img} = this.props;
 
         if (img) {
             return (
@@ -27,24 +27,33 @@ class TableData extends React.Component {
             )
         }
 
-        const del = undel ? null : (
+        const delBTN = del ? (
             <Button
                 isActive
                 callOnActive={() => this.props.delete(model.id)}
                 showOnActive={(<i className="fa fa-times"/>)}/>
-        );
+        ) : null;
 
-        const edit = uneditable ? null : (
+        const plusBTN = plus ? (
             <Button
                 isActive
-                callOnActive={() => this.props.redirect(model.id)}
+                callOnActive={() => this.props.redirect(model.id, true)}
+                showOnActive={(<i className={"fa fa-plus d-inline"}/>)}/>
+        ) : null;
+
+        const editBTN = edit ? (
+            <Button
+                isActive
+                callOnActive={() => this.props.redirect(model.id, false)}
                 showOnActive={(<i className="fa fa-pencil"/>)}/>
-        );
+        ) : null;
         const optionButtons = (
             <div className="btn-group">
-                {del}
+                {delBTN}
 
-                {edit}
+                {plusBTN}
+
+                {editBTN}
             </div>
         );
 

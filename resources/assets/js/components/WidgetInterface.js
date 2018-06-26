@@ -7,7 +7,12 @@ class WidgetInterface extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            managinDepartmentsURL: 'managing-departments',
+            managinDepartmentsURL: 'managing-departments/list',
+            employeeSubCollectionURL: 'employees/{id}/sub-collection',
+            departmentSubCollectionURL: 'departments/{id}/sub-collection',
+            unformedEmployeesURL: 'unformed-employees',
+            archivedEmployeesURL: 'archived-employees',
+            freePositionsURL: 'free-positions',
         };
     }
 
@@ -19,6 +24,64 @@ class WidgetInterface extends React.Component {
                 this.setState({ collection: response.data });
             },
         );
+    }
+
+    loadUnformedEmployeesCollection() {
+        this.loadSubCollection(
+            this.state.unformedEmployeesURL,
+            (response) => {
+                this.addPath(response.data, [], 'unformed');
+                this.setState({ unformedEmployeesCollection: response.data });
+            },
+        );
+    }
+
+    loadArchivedEmployees() {
+        this.loadSubCollection(
+            this.state.archivedEmployeesURL,
+            (response) => {
+                this.addPath(response.data, [], 'archive');
+                this.setState({ archive: response.data });
+            },
+        );
+    }
+
+    loadFreePositionsCollection() {
+        this.loadSubCollection(
+            this.state.freePositionsURL,
+            (response) => {
+                this.addPath(response.data, [], 'positions');
+                this.setState({ freePositions: response.data });
+            },
+        );
+    }
+
+    setName(name) {
+        this.setState({ name });
+    }
+    setEmployee(employee) {
+        this.setState({ employee });
+    }
+    setDepartment(department) {
+        this.setState({ department });
+    }
+    setPosition(position) {
+        this.setState({ position });
+    }
+    setWage(wage) {
+        this.setState({ wage });
+    }
+    setDescription(description) {
+        this.setState({ description });
+    }
+    setHeadEmployee(headEmployee) {
+        this.setState({ headEmployee });
+    }
+    setExceptionModelID(exceptionModelID) {
+        this.setState({ exceptionModelID });
+    }
+    setEmployeeMarker(employeeMarker) {
+        this.setState({ employeeMarker });
     }
 
     downSelected(nullValue, model) {
@@ -83,6 +146,26 @@ class WidgetInterface extends React.Component {
         return [collection, coll];
     }
 
+    removeSubCollection(path, mainCollection = this.state.collection) {
+        const collection = JSON.parse(JSON.stringify(mainCollection));
+
+        let coll = collection;
+        path.forEach((e, i) => {
+            if (coll.sub_collection) {
+                if ((path.length - 1) === i) {
+                    coll.sub_collection.splice(e, 1);
+                } else {
+                    coll = coll.sub_collection[e];
+                }
+
+            }  else {
+                coll = coll[e];
+            }
+        });
+
+        return collection;
+    }
+
     insertCollection(path, response, disabledSetFalse = false) {
         const [collection, coll] = this.getSubCollection(path);
 
@@ -98,7 +181,7 @@ class WidgetInterface extends React.Component {
         this.toggleDisabled(path, disabledSetFalse)
     }
 
-    loadSubCollection(baseUrl, callback, reload = true, urlBuilder = true) {
+    loadSubCollection(baseUrl, callback, urlBuilder = true, reload = true) {
         axios.create({
             baseURL: urlBuilder ? `${document.location.origin}/api/${baseUrl}` : baseUrl,
             headers: {
@@ -107,19 +190,85 @@ class WidgetInterface extends React.Component {
                 'X-USER-ID': `${window.user_id}`,
             }
         })
-        .get()
-        .then(response => {
-            if (response.status === 500 && reload) {
-                this.loadSubCollection(baseUrl, callback, false)
-            } else {
-                callback(response)
-            }
+            .get()
+            .then(response => {
+                if (response.status === 500 && reload) {
+                    this.loadSubCollection(baseUrl, callback, urlBuilder, false)
+                } else {
+                    callback(response)
+                }
 
-        });
+            });
     }
+
+    submitForm(data, url, put = false, callback) {
+        const method = put ? 'put' : 'post';
+        axios[method](
+            url,
+            data,
+            {
+                headers: {
+                    'X-REMEMBER-TOKEN': window.remember_token,
+                    'X-USER-ID': `${window.user_id}`,
+                },
+            }
+        )
+            .then(response => {
+                if (response.status === 201) {
+                    callback();
+                }
+            })
+            .catch(error => console.log(error));
+    }
+
+    sendDELETErequest(URL, callback) {
+        axios.delete(URL)
+            .then(response => {
+                if (response.status === 201) {
+                    callback();
+                } else if (response.status === 204) {
+                    alert('Невозможно удалить используемый элемент')
+                }
+            })
+            .catch(error => console.log(error));
+    }
+
 
     redirect() {
         document.location.assign(document.URL.replace(/\/[0-9].*/, ''));
+    }
+
+    loadCollectionList(url) {
+        this.setState({onLoad: true});
+
+        if (url) {
+            this.loadSubCollection(
+                url,
+                (response) => this.setState({
+                    current_page: response.data.current_page,
+                    last_page: response.data.last_page,
+                    collection: response.data.data,
+                    onLoad: false
+                }),
+                false,
+                true
+            )
+        }
+
+    }
+
+    deleteItem(id, msg, reloadURL) {
+        if (confirm(msg)) {
+            const url = `${document.URL}/${id}`;
+            this.sendDELETErequest(
+                url,
+                () => this.loadCollectionList(reloadURL)
+            );
+        }
+    }
+
+    downState() {
+        this.setState({})
     }
 
     toggleDisabled(path, setFalse = false) {
@@ -150,11 +299,7 @@ class WidgetInterface extends React.Component {
 
         const [collection, coll] = this.getSubCollection(model.path, mainCollection);
 
-        if (coll.selected) {
-            coll.selected = false;
-        } else {
-            coll.selected = true;
-        }
+        coll.selected = !coll.selected;
 
         if (model.marker === 'collection') {
             this.setState({ collection });
@@ -214,25 +359,6 @@ class WidgetInterface extends React.Component {
         return modelList;
     }
 
-
-    loadCollectionList(url) {
-        this.setState({onLoad: true});
-
-        if (url) {
-            this.loadSubCollection(
-                url,
-                (response) => this.setState({
-                    current_page: response.data.current_page,
-                    last_page: response.data.last_page,
-                    collection: response.data.data,
-                    onLoad: false
-                }),
-                true,
-                false
-            )
-        }
-
-    }
 
 }
 export default WidgetInterface;

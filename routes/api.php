@@ -17,7 +17,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/managing-departments', 'Api\MainController@getManagingDepartments');
+Route::get('/managing-departments/{type}', 'Api\MainController@getManagingDepartments')->where(['type' => 'list|widget']);
 
 Route::middleware('custom.api.auth')->group(function () {
 
@@ -25,6 +25,25 @@ Route::middleware('custom.api.auth')->group(function () {
 
     Route::get('/employees/collection-list', 'Api\MainController@getEmployeesCollectionList');
 
+    Route::get('/archived-employees/collection-list', 'Api\MainController@getArchivedEmployeesCollectionList');
+
     Route::get('/unformed-employees/collection-list', 'Api\MainController@getUnformedEmployeesCollectionList');
+
+    Route::get('/employees/{id}/sub-collection', 'Api\MainController@getSubCollectionByEmployee');
+
+    Route::get('/unformed-employees', 'Api\MainController@getUnformedEmployees');
+
+    Route::get('/archived-employees', 'Api\MainController@getArchivedEmployees');
+
+    Route::get('/free-positions', 'Api\MainController@getFreePositions');
+
+    Route::get('/departments/{id}/sub-collection', 'Api\MainController@getSubCollectionByDepartment');
+
+    Route::get('/departments/collection-list', 'Api\MainController@getDepartmentsCollectionList');
+
+    Route::get('/positions/collection-list', 'Api\MainController@getPositionsCollectionList');
+
+    Route::get('/events/collection-list', 'Api\MainController@getEventsCollectionList');
+
 
 });

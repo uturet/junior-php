@@ -11,33 +11,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Employee::class, 500)->create();
+        $this->createEmployees(5, 9);
 
-        list($e_num, $h_lvl) = array(9, 5);
+        $this->createUnformedArchivedEmployees(5, 5);
 
-        $head_employee = factory(App\Employee::class)->create();
-        $head_department = factory(App\Department::class)->create();
-        $this->employeeEventMediator($head_department->id, $head_employee->id);
-        $departments = $this->subDepartments([$head_employee]);
-
-        for ($i = 0; $i < $h_lvl; $i++) {
-            $employees = [];
-
-            foreach ($departments as $department) {
-
-                $callback = function ($employee) use ($department) {
-                  $this->employeeEventMediator($department->id, $employee->id);
-                };
-
-                array_push($employees,
-                    ...(factory(App\Employee::class, $e_num)->create()->each($callback)->all()));
-            }
-
-            if ($i < $h_lvl - 1) {
-                $departments = $this->subDepartments($employees);
-            }
-
-        }
+        factory(App\Position::class, 5)->create();
     }
 
     protected function employeeEventMediator($department_id, $employee_id)
@@ -74,6 +52,58 @@ class DatabaseSeeder extends Seeder
             $departments[] = $employee->department;
         }
         return $departments;
+    }
+
+    protected function createUnformedArchivedEmployees($unformed, $archived)
+    {
+        factory(App\Employee::class, $unformed)->create();
+
+        factory(App\Employee::class, $archived)->create()->each(
+            function ($employee) {
+                $event = factory(App\Event::class)->create([
+                    'employee_id' => $employee->id,
+                    'is_archive' => 1
+                ]);
+                factory(App\Mediator::class)->create([
+                    'employee_id' => $employee->id,
+                    'recruitment_event_id' => $event->id,
+                    'department_id' => $event->department_id,
+                    'position_id' => $event->position_id,
+                    'wage' => $event->wage,
+                    'is_archive' => $event->is_archive,
+                ]);
+            });
+    }
+
+    /**
+     * @param $h_lvl
+     * @param $e_num
+     */
+    protected function createEmployees($h_lvl, $e_num)
+    {
+        $head_employee = factory(App\Employee::class)->create();
+        $head_department = factory(App\Department::class)->create();
+        $this->employeeEventMediator($head_department->id, $head_employee->id);
+        $departments = $this->subDepartments([$head_employee]);
+
+        for ($i = 0; $i < $h_lvl; $i++) {
+            $employees = [];
+
+            foreach ($departments as $department) {
+
+                $callback = function ($employee) use ($department) {
+                    $this->employeeEventMediator($department->id, $employee->id);
+                };
+
+                array_push($employees,
+                    ...(factory(App\Employee::class, $e_num)->create()->each($callback)->all()));
+            }
+
+            if ($i < $h_lvl - 1) {
+                $departments = $this->subDepartments($employees);
+            }
+
+        }
     }
 
 

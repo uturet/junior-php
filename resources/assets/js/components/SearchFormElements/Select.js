@@ -12,6 +12,7 @@ class Select extends React.Component{
     render() {
         let defaultValue = 'null';
         const options = this.props.options.map(option => {
+            if (option.hidden) {return null}
             if (option.selected) {defaultValue = option.value}
             return (
                 <option
