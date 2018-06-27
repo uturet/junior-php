@@ -30,6 +30,7 @@ ReactDOM.render(
                 <th>
                     Заработная плата
                 </th>
+                <th/>
             </tr>
             </thead>
         )}
@@ -55,8 +56,10 @@ ReactDOM.render(
             },
             {
                 modelProp: 'wage',
-                del: true,
-                edit: true
+            },
+            {
+                modelProp: 'photo_url',
+                img: true
             }
         ]}
         header={'Иерархия Сотрудников'}/>,

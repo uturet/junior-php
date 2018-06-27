@@ -25,6 +25,10 @@ ReactDOM.render(
         ]}
         searchFields={[
             {
+              img: true,
+              value: 'photo_url'
+            },
+            {
                 value: 'id',
                 label: 'ID'
             },

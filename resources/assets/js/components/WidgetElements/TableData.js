@@ -18,9 +18,15 @@ class TableData extends React.Component {
                 <td>
                     {model[modelProp] ? (
                         <img
-                            className={'img-xs rounded-circle'}
+                            style={{
+                                width: 'auto',
+                                height: 'auto',
+                                minWidth: '37px',
+                                maxHeight: '37px',
+                            }}
                             src={`/uploads/avatars/${model[modelProp]}`}
                             alt="Фотография"/>
+
                     ) : null}
 
                 </td>

@@ -36,4 +36,30 @@ class Employee extends Model
     {
         return $this->hasOne('App\Department', 'head_employee_id');
     }
+
+    public function getImage()
+    {
+        if (!$this->photo_url) {
+            return "/uploads/avatars/no_avatar.png";
+        }
+        return "/uploads/avatars/$this->photo_url";
+    }
+
+    public function uploadImage($image)
+    {
+        if($image == null) { return; }
+
+        $this->removeImage();
+        $fileName = str_random(30). '.' . $image->extension();
+        $image->move('uploads/avatars', $fileName);
+        $this->photo_url = $fileName;
+        $this->save();
+    }
+
+    public function removeImage()
+    {
+        if($this->image != null) {
+            Storage::delete('uploads/avatars/' . $this->photo_url);
+        }
+    }
 }

@@ -76,6 +76,7 @@ class EmployeeController extends Controller
         ]);
 
         $employee = Employee::create($request->all());
+        $employee->uploadImage($request->avatar);
 
         return redirect()->route('employees.show', ['id' => $employee->id]);
     }
@@ -119,9 +120,11 @@ class EmployeeController extends Controller
             'name' => 'required',
             'last_name' => 'required',
             'patronymic' => 'required',
+            'avatar' => 'image|mimes:jpg,png,jpeg'
         ]);
         $employee = Employee::findOrFail($id);
         $employee->update($request->all());
+        $employee->uploadImage($request->avatar);
 
         return redirect()->route('employees.show', ['id' => $employee->id]);
     }

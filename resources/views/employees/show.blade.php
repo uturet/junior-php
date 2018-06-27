@@ -107,7 +107,7 @@
 
                                 <div class="col-sm-6">
                                     <div class="card">
-                                        <img class="card-img" src="" alt="avatar">
+                                        <img class="card-img" src="{{ $employee->getImage()  }}" alt="avatar">
                                     </div>
                                 </div>
 

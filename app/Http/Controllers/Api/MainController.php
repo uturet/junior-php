@@ -58,6 +58,7 @@ class MainController extends Controller
             ->leftJoin(DB::raw('employees as head_employees'),'departments.head_employee_id','=','head_employees.id')
             ->select(
                 DB::raw('employees.id as id'),
+                DB::raw('employees.photo_url as photo_url'),
                 DB::raw('employees.phone as phone'),
                 DB::raw('employees.email as email'),
                 DB::raw('mediators.is_archive as is_archive'),
@@ -279,6 +280,7 @@ class MainController extends Controller
                 DB::raw("concat($department.id, ',', $department.name) as department"),
                 'mediators.wage',
                 'mediators.created_at',
+                'employees.photo_url',
                 DB::raw('positions.name as position_name'),
                 DB::raw('departments.name as department_name'),
                 DB::raw('concat(employees.last_name," ", employees.name, " ", employees.patronymic) as employee_full_name'),

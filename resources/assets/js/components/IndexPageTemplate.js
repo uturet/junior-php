@@ -93,16 +93,17 @@ class IndexPageTemplate extends WidgetInterface {
                         CollectionListURL
                     ) : undefined}
                     redirect={(id, isEdit)=> this.redirect(id, isEdit)}
+                    img={e.img}
                     del={e.del}
                     plus={e.plus}
                     edit={e.edit}/>
             )
         });
 
-        const tableHeadList = searchFields.map(e => {
-            if (e.hidden) {
+        const tableHeadList = searchFields.map((e, i) => {
+            if (e.hidden || e.img) {
                 return (
-                    <td key={'disabled'}/>
+                    <td key={i}/>
                 )
             } else {
                 return (
