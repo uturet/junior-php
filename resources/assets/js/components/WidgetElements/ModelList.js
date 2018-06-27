@@ -10,7 +10,17 @@ class ModelList extends React.Component {
     }
 
     render() {
-        const { collection, children, hierarchy, modelName, isList, thead, footer } = this.props;
+        const {
+            collection,
+            children,
+            hierarchy,
+            modelName,
+            isList,
+            thead,
+            footer,
+            draggable,
+            enterColor,
+            enter, } = this.props;
 
         if (!collection) { return (<div className="text-muted">Нет элементов</div>); }
 
@@ -21,7 +31,16 @@ class ModelList extends React.Component {
             const Model = React.Children.map(children, child =>
                 React.cloneElement(child, { model, hierarchy, modelName}));
 
-            return (
+            return draggable ? (
+                <tr style={model.path === enter ? {backgroundColor: enterColor} : null}
+                    draggable={draggable}
+                    key={[model.id, model.path, model.selected, model.disabled, model.marker]}
+                    onDragStart={() => this.props.onDragStart(model.path)}
+                    onDragEnd={() => this.props.onDragEnd(model.path)}
+                    onDragEnter={() => this.props.onDragEnter(model.path)}>
+                    {Model}
+                </tr>
+            ) : (
                 <tr key={[model.id, model.path, model.selected, model.disabled, model.marker]}>
                     {Model}
                 </tr>

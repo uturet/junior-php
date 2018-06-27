@@ -11,7 +11,7 @@ class TableData extends React.Component {
     }
 
     render() {
-        const {modelProp, model, edit, plus, del, img} = this.props;
+        const {modelProp, model, edit, plus, del, img, redirectProp} = this.props;
 
         if (img) {
             return (
@@ -43,14 +43,14 @@ class TableData extends React.Component {
         const plusBTN = plus ? (
             <Button
                 isActive
-                callOnActive={() => this.props.redirect(model.id, true)}
+                callOnActive={() => this.props.redirect(model[redirectProp], true)}
                 showOnActive={(<i className={"fa fa-plus d-inline"}/>)}/>
         ) : null;
 
         const editBTN = edit ? (
             <Button
                 isActive
-                callOnActive={() => this.props.redirect(model.id, false)}
+                callOnActive={() => this.props.redirect(model[redirectProp], false)}
                 showOnActive={(<i className="fa fa-pencil"/>)}/>
         ) : null;
         const optionButtons = (

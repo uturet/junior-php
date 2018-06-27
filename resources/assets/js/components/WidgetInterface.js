@@ -146,32 +146,13 @@ class WidgetInterface extends React.Component {
         return [collection, coll];
     }
 
-    removeSubCollection(path, mainCollection = this.state.collection) {
-        const collection = JSON.parse(JSON.stringify(mainCollection));
-
-        let coll = collection;
-        path.forEach((e, i) => {
-            if (coll.sub_collection) {
-                if ((path.length - 1) === i) {
-                    coll.sub_collection.splice(e, 1);
-                } else {
-                    coll = coll.sub_collection[e];
-                }
-
-            }  else {
-                coll = coll[e];
-            }
-        });
-
-        return collection;
-    }
-
     insertCollection(path, response, disabledSetFalse = false) {
         const [collection, coll] = this.getSubCollection(path);
 
         if (response.data.length) {
             this.addPath(response.data, path, 'collection');
             coll.sub_collection = response.data;
+            coll.failed = false;
         } else {
             coll.failed = true;
             coll.sub_collection = undefined;

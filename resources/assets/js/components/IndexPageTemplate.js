@@ -93,6 +93,7 @@ class IndexPageTemplate extends WidgetInterface {
                         CollectionListURL
                     ) : undefined}
                     redirect={(id, isEdit)=> this.redirect(id, isEdit)}
+                    redirectProp={'id'}
                     img={e.img}
                     del={e.del}
                     plus={e.plus}

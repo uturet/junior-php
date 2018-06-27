@@ -283,6 +283,7 @@ class MainController extends Controller
                 'employees.photo_url',
                 DB::raw('positions.name as position_name'),
                 DB::raw('departments.name as department_name'),
+                DB::raw('employees.id as employee_id'),
                 DB::raw('concat(employees.last_name," ", employees.name, " ", employees.patronymic) as employee_full_name'),
                 DB::raw('concat(head_employees.last_name, " ", head_employees.name," ", head_employees.patronymic) as head_employee_full_name')
             );

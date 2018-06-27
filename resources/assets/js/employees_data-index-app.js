@@ -5,6 +5,7 @@ import HierarchyIndexPageTemplate from './components/HierarchyIndexPageTemplate'
 ReactDOM.render(
     <HierarchyIndexPageTemplate
         subCollectionURL={'departments/{id}/sub-collection-list'}
+        postURL={`${document.URL}events`}
         minWidth={'1250px'}
         thead={(
             <thead>
@@ -30,6 +31,7 @@ ReactDOM.render(
                 <th>
                     Заработная плата
                 </th>
+                <th/>
                 <th/>
             </tr>
             </thead>
@@ -60,6 +62,11 @@ ReactDOM.render(
             {
                 modelProp: 'photo_url',
                 img: true
+            },
+            {
+                hidden: true,
+                plus: true,
+                edit: true,
             }
         ]}
         header={'Иерархия Сотрудников'}/>,
